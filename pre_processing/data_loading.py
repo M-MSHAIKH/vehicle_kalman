@@ -115,6 +115,36 @@ t_Vpsi = generate_time_vector(timestamps_Vpsi)
 #     print("The size of time vectors are not equal. Hence, the data is collected at different sampling frequencies.")   
 # 
 ######################################################################################################################  
+# MAking a common_time frame
+
+# Calculate time differences for each signal
+diff_tx = np.diff(t_longx)
+diff_ty = np.diff(t_laty)
+diff_ta = np.diff(t_ax)
+diff_tv = np.diff(t_Vx)
+diff_td = np.diff(t_delta)
+diff_tVpsi = np.diff(t_Vpsi)
+
+# Choose a common time frame (e.g., based on the highest frequency sensor)
+max_freq = max(1/np.mean(diff_tx), 1/np.mean(diff_ty), 1/np.mean(diff_ta), 1/np.mean(diff_tv), 1/np.mean(diff_td))
+print("Max frequency (Hz):", max_freq)      # The highest frequency is 200 Hz of the Acceleration sensor
+min_freq = min(1/np.mean(diff_tx), 1/np.mean(diff_ty), 1/np.mean(diff_ta), 1/np.mean(diff_tv), 1/np.mean(diff_td))
+print("Min frequency (Hz):", min_freq)    # The lowest frequency is 5 Hz of the GPS sensor (longitude and latitude measurement)
+common_freq = 200  # Choose a common frequency (e.g., based on the highest frequency sensor)
+common_dt = 1 / common_freq  # Time step for the common frequency
+max_time = np.max([np.max(t_longx), np.max(t_laty), np.max(t_ax), np.max(t_Vx), np.max(t_delta)])
+min_time = np.min([np.min(t_longx), np.min(t_laty), np.min(t_ax), np.min(t_Vx), np.min(t_delta)])
+
+# np.rint round off to nearest integer or use int only, you will get an value error solve it later on
+num_time = np.rint((max_time - min_time)/common_dt)
+common_time = np.arange(min_time, 
+                        max_time, 
+                        common_dt)
+
+if np.shape(common_time)[0] != num_time:
+    print("Shape mismatch in common_time array.")
+
+#######################################################################################################################
 # 
 # 2. Converting the longitude and latitude from degrees to meters
 # WGS84 constants for more correct ECEF conversion
@@ -229,37 +259,6 @@ diff_Vpsi, psi= diff_func(t_Vpsi, Vpsi_rad)
 # axs[1].set_title('Heading angle - rad')
 # plt.tight_layout()
 # plt.show()
-
-#########################################################################################################################
-# MAking a common_time frame
-
-# Calculate time differences for each signal
-diff_tx = np.diff(t_longx)
-diff_ty = np.diff(t_laty)
-diff_ta = np.diff(t_ax)
-diff_tv = np.diff(t_Vx)
-diff_td = np.diff(t_delta)
-diff_tVpsi = np.diff(t_Vpsi)
-
-# Choose a common time frame (e.g., based on the highest frequency sensor)
-max_freq = max(1/np.mean(diff_tx), 1/np.mean(diff_ty), 1/np.mean(diff_ta), 1/np.mean(diff_tv), 1/np.mean(diff_td))
-print("Max frequency (Hz):", max_freq)      # The highest frequency is 200 Hz of the Acceleration sensor
-min_freq = min(1/np.mean(diff_tx), 1/np.mean(diff_ty), 1/np.mean(diff_ta), 1/np.mean(diff_tv), 1/np.mean(diff_td))
-print("Min frequency (Hz):", min_freq)    # The lowest frequency is 5 Hz of the GPS sensor (longitude and latitude measurement)
-common_freq = 200  # Choose a common frequency (e.g., based on the highest frequency sensor)
-common_dt = 1 / common_freq  # Time step for the common frequency
-max_time = np.max([np.max(t_longx), np.max(t_laty), np.max(t_ax), np.max(t_Vx), np.max(t_delta)])
-min_time = np.min([np.min(t_longx), np.min(t_laty), np.min(t_ax), np.min(t_Vx), np.min(t_delta)])
-
-# np.rint round off to nearest integer or use int only, you will get an value error solve it later on
-num_time = np.rint((max_time - min_time)/common_dt)
-common_time = np.arange(min_time, 
-                        max_time, 
-                        common_dt)
-
-if np.shape(common_time)[0] != num_time:
-    print("Shape mismatch in common_time array.")
-
 
 #####################################################################################################################################
 # Event Trigger classes for each sensor (Fort IMU the event trigger is not needed as it is the highest frequency sensor, 
