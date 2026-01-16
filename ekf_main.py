@@ -4,6 +4,7 @@ from ekf.ekf import matrices_definition
 from vehicle_model.kinematic_bicycle_model import KinematicBicycleModel
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import PillowWriter
 from pre_processing.data_loading import pre_processed_data
 
 # Load pre-processed data
@@ -150,6 +151,45 @@ plt.legend()
 plt.grid()
 plt.show()
 
+############################################################################################################################
+# Create an animated GIF to visualize the EKF estimated vehicle path
+# Plot GPS coordinates with moving dot
+fig, ax = plt.subplots()
+ax.plot(X_upd[:n,0,0], X_upd[:n,1,0], label='EKF Estimation Path', color='blue', linestyle='-')
+ax.plot(xlong_event_array, ylat_event_array, label='GNSS Measurements', color='red', linestyle='dashed')
+ax.set_xlabel('Longitude Distance (m)')
+ax.set_ylabel('Latitude Distance (m)')
+ax.legend(['EKF Estimation Path', 'GNSS Measurements'], loc='upper left')
+dot, = ax.plot([], [], marker=".", label='Current Point')       # Plotting moving dot along the path
+
+tol = 5  # tolerance for setting axis limits
+ax.set_xlim(min(X_upd[:n,0,0]) - tol, max(X_upd[:n,0,0]) + tol)
+ax.set_ylim(min(X_upd[:n,1,0]) - tol, max(X_upd[:n,1,0]) + tol)
+
+metadata = dict(title='lat long degree', artist='mmshaikh')
+writer = PillowWriter(fps=15, metadata=metadata)
+step = 35  # Adjust step size for faster animation
+
+# 1. Update the dot definition (larger marker, bright color, forced to top)
+dot, = ax.plot([], [], marker="o", markersize=8, color="red", label='Current Point', zorder=5)
+
+# 2. Use the saving context
+with writer.saving(fig, 'EKF_estimated_vehicle_path.gif', 100):
+    for i in range(0, n, step): 
+        # Use ax.set_title for better performance in loops
+        ax.set_title(f'Vehicle Position (meters) at iteration {i} (Ingolstadt Bus Data)')
+        
+        # Update dot position
+        current_x = X_upd[i, 0, 0]
+        current_y = X_upd[i, 1, 0]
+        dot.set_data([current_x], [current_y])
+        
+        # Optional: Print to console to verify data is actually changing
+        # print(f"Iteration {i}: X={current_x}, Y={current_y}")
+        
+        writer.grab_frame()
+
+print("EKF estimated vehicle path animation saved as GIF.")
 
 
 print("EKF processing completed.")
