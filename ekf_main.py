@@ -159,7 +159,7 @@ ax.plot(X_upd[:n,0,0], X_upd[:n,1,0], label='EKF Estimation Path', color='blue',
 ax.plot(xlong_event_array, ylat_event_array, label='GNSS Measurements', color='red', linestyle='dashed')
 ax.set_xlabel('Longitude Distance (m)')
 ax.set_ylabel('Latitude Distance (m)')
-ax.legend(['EKF Estimation Path', 'GNSS Measurements'], loc='upper left')
+ax.legend(['EKF Estimation Path', 'GNSS Measurements'], loc='upper right')
 dot, = ax.plot([], [], marker=".", label='Current Point')       # Plotting moving dot along the path
 
 tol = 5  # tolerance for setting axis limits

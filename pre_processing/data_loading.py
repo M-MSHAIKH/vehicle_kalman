@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import data
-data = pd.read_json("here copy the bus signal file path")
+data = pd.read_json("/Users/moaadil/audi_a2dc/ingolstadt_new/camera_lidar/20190401_145936/bus/20190401145936_bus_signals.json")
 def extract_signal_data(signal_name):
     for key,value in data.items():
         if key == signal_name:
