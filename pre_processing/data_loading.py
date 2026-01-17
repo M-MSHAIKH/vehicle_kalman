@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # import data
-data = pd.read_json("/Users/moaadil/audi_a2dc/ingolstadt/camera_lidar/20190401_121727/bus/20190401121727_bus_signals.json")
+data = pd.read_json("here copy the bus signal file path")
 def extract_signal_data(signal_name):
     for key,value in data.items():
         if key == signal_name:
@@ -57,8 +57,8 @@ timestamps_Vpsi = [datetime.datetime.fromtimestamp(ts/1e6, datetime.timezone.utc
 
 
 # assigning the ref time, min and max timestamp. As the min and max timestamps can be found from the acceleration data, beacuse it has the highest sampling frequency or highest number of data points
-t_min = timestamps_ax[0]
-t_max = timestamps_ax[-1]
+t_min = np.min([timestamps_longx[0], timestamps_lat[0], timestamps_ax[0], timestamps_Vx[0], timestamps_delta[0], timestamps_Vpsi[0]])
+t_max = np.max([timestamps_longx[-1], timestamps_lat[-1], timestamps_ax[-1], timestamps_Vx[-1], timestamps_delta[-1], timestamps_Vpsi[-1]])
 # Generating a time vector in sec
 def generate_time_vector(timestamps):
     """

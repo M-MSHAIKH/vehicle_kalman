@@ -25,7 +25,9 @@ Converting a vehicle's longitude and latitude (from a GPS, in the WGS 84 datum) 
 
 The EKF estimation along with the actual GNSS measurement shown below.
 
-![Comparision With Vehicle Estimated Path with GNSS Measurement](EKF_estimated_vehicle_path.gif)
+![Comparision With Vehicle Estimated Path with GNSS Measurement](img/EKF_estimated_vehicle_path_Ingolstadt.gif)
+![](img/EKF_estimated_vehicle_path_Munich.gif)
+![](img/EKF_estimated_vehicle_path_Gaimerscheim.gif)
 
 
 

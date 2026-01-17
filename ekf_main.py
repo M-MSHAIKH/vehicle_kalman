@@ -174,10 +174,10 @@ step = 35  # Adjust step size for faster animation
 dot, = ax.plot([], [], marker="o", markersize=8, color="red", label='Current Point', zorder=5)
 
 # 2. Use the saving context
-with writer.saving(fig, 'EKF_estimated_vehicle_path.gif', 100):
+with writer.saving(fig, 'EKF_estimated_vehicle_path_Ingolstadt.gif', 100):
     for i in range(0, n, step): 
         # Use ax.set_title for better performance in loops
-        ax.set_title(f'Vehicle Position (meters) at iteration {i} (Ingolstadt Bus Data)')
+        ax.set_title(f'Vehicle Position (meters) at iteration {i} (Ingolstadt, Deutschland)')
         
         # Update dot position
         current_x = X_upd[i, 0, 0]
