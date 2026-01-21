@@ -14,6 +14,7 @@ xlong_event_array = pre_processed_data['xlong_event_array']
 ylat_event_array = pre_processed_data['ylat_event_array']
 common_time = pre_processed_data['common_time']
 dt = pre_processed_data['dt']
+
 # Example usage of the Extended Kalman Filter
 n = len(omega_z)
 num_states = 3  # [x, y, psi]
@@ -97,7 +98,7 @@ plt.legend()
 plt.axis('equal')
 plt.show() 
 
-# # potting the slip angle beta over time
+# potting the slip angle beta over time
 # plt.figure()
 # plt.plot(common_time[:-1], jacobian_var[:,0,0], label='Slip Angle Beta')
 # plt.xlabel('Time (s)')
@@ -106,6 +107,25 @@ plt.show()
 # plt.legend()
 # plt.grid()
 # plt.show()
+
+fig = plt.figure()
+plt.subplot(2,1,1)
+plt.plot(common_time[:-1], omega_z, label='Yaw Rate From IMU')
+plt.xlabel('Time (s)')
+plt.ylabel('Yaw Rate from IMU (rad/sec)')
+plt.title('Yaw Rate From IMU over Time', fontsize=10)
+plt.legend()
+plt.grid()
+plt.subplot(2,1,2)
+plt.plot(common_time[:-1], X_upd[:,2,0], label='Yaw or Heading Angle from EKF')
+plt.xlabel('Time (sec)')
+plt.ylabel('Yaw or Heading Angle (rad)')
+plt.title('Yaw or Heading Angle over Time', fontsize=10)
+plt.legend()
+plt.grid()
+fig.set_size_inches(11, 11)
+plt.savefig('Yaw_Rate_and_Yaw_Angle_Ingolstadt.png', dpi=900)
+plt.show()
 
 ##########################################################################################################################
 # Interesting plots to visualize the EKF behaviour
@@ -133,7 +153,7 @@ plt.figure()
 plt.plot(common_time[0:n], y_tilde[:,0,0], label='Innovation Residual X')
 plt.plot(common_time[0:n], upper_bound_x, 'r--', label='3σ Upper Bound X')
 plt.plot(common_time[0:n], lower_bound_x, 'r--', label='3σ Lower Bound X')
-plt.xlabel('Time (s)')
+plt.xlabel('Time (sec)')
 plt.ylabel('Innovation Residual X (m)')
 plt.title('Innovation Residual X vs. 3σ Bounds')
 plt.legend()
@@ -144,7 +164,7 @@ plt.figure()
 plt.plot(common_time[0:n], y_tilde[:,1,0], label='Innovation Residual Y')
 plt.plot(common_time[0:n], upper_bound_y, 'r--', label='3σ Upper Bound Y')
 plt.plot(common_time[0:n], lower_bound_y, 'r--', label='3σ Lower Bound Y')
-plt.xlabel('Time (s)')          
+plt.xlabel('Time (sec)')          
 plt.ylabel('Innovation Residual Y (m)')
 plt.title('Innovation Residual Y vs. 3σ Bounds')
 plt.legend()
@@ -153,43 +173,44 @@ plt.show()
 
 ############################################################################################################################
 # Create an animated GIF to visualize the EKF estimated vehicle path
+
 # Plot GPS coordinates with moving dot
-fig, ax = plt.subplots()
-ax.plot(X_upd[:n,0,0], X_upd[:n,1,0], label='EKF Estimation Path', color='blue', linestyle='-')
-ax.plot(xlong_event_array, ylat_event_array, label='GNSS Measurements', color='red', linestyle='dashed')
-ax.set_xlabel('Longitude Distance (m)')
-ax.set_ylabel('Latitude Distance (m)')
-ax.legend(['EKF Estimation Path', 'GNSS Measurements'], loc='upper right')
-dot, = ax.plot([], [], marker=".", label='Current Point')       # Plotting moving dot along the path
+# fig, ax = plt.subplots()
+# ax.plot(X_upd[:n,0,0], X_upd[:n,1,0], label='EKF Estimation Path', color='blue', linestyle='-')
+# ax.plot(xlong_event_array, ylat_event_array, label='GNSS Measurements', color='red', linestyle='dashed')
+# ax.set_xlabel('Longitude Distance (m)')
+# ax.set_ylabel('Latitude Distance (m)')
+# ax.legend(['EKF Estimation Path', 'GNSS Measurements'], loc='upper right')
+# dot, = ax.plot([], [], marker=".", label='Current Point')       # Plotting moving dot along the path
 
-tol = 5  # tolerance for setting axis limits
-ax.set_xlim(min(X_upd[:n,0,0]) - tol, max(X_upd[:n,0,0]) + tol)
-ax.set_ylim(min(X_upd[:n,1,0]) - tol, max(X_upd[:n,1,0]) + tol)
+# tol = 5  # tolerance for setting axis limits
+# ax.set_xlim(min(X_upd[:n,0,0]) - tol, max(X_upd[:n,0,0]) + tol)
+# ax.set_ylim(min(X_upd[:n,1,0]) - tol, max(X_upd[:n,1,0]) + tol)
 
-metadata = dict(title='lat long degree', artist='mmshaikh')
-writer = PillowWriter(fps=15, metadata=metadata)
-step = 35  # Adjust step size for faster animation
+# metadata = dict(title='lat long degree', artist='mmshaikh')
+# writer = PillowWriter(fps=15, metadata=metadata)
+# step = 35  # Adjust step size for faster animation
 
-# 1. Update the dot definition (larger marker, bright color, forced to top)
-dot, = ax.plot([], [], marker="o", markersize=8, color="red", label='Current Point', zorder=5)
+# # 1. Update the dot definition (larger marker, bright color, forced to top)
+# dot, = ax.plot([], [], marker="o", markersize=8, color="red", label='Current Point', zorder=5)
 
-# 2. Use the saving context
-with writer.saving(fig, 'EKF_estimated_vehicle_path_Ingolstadt.gif', 100):
-    for i in range(0, n, step): 
-        # Use ax.set_title for better performance in loops
-        ax.set_title(f'Vehicle Position (meters) at iteration {i} (Ingolstadt, Deutschland)')
+# # 2. Use the saving context
+# with writer.saving(fig, 'EKF_estimated_vehicle_path_Ingolstadt.gif', 100):
+#     for i in range(0, n, step): 
+#         # Use ax.set_title for better performance in loops
+#         ax.set_title(f'Vehicle Position (meters) at iteration {i} (Ingolstadt, Deutschland)')
         
-        # Update dot position
-        current_x = X_upd[i, 0, 0]
-        current_y = X_upd[i, 1, 0]
-        dot.set_data([current_x], [current_y])
+#         # Update dot position
+#         current_x = X_upd[i, 0, 0]
+#         current_y = X_upd[i, 1, 0]
+#         dot.set_data([current_x], [current_y])
         
-        # Optional: Print to console to verify data is actually changing
-        # print(f"Iteration {i}: X={current_x}, Y={current_y}")
+#         # Optional: Print to console to verify data is actually changing
+#         # print(f"Iteration {i}: X={current_x}, Y={current_y}")
         
-        writer.grab_frame()
+#         writer.grab_frame()
 
-print("EKF estimated vehicle path animation saved as GIF.")
+# print("EKF estimated vehicle path animation saved as GIF.")
 
 
 print("EKF processing completed.")

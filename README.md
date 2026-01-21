@@ -21,6 +21,7 @@ Converting a vehicle's longitude and latitude (from a GPS, in the WGS 84 datum) 
 
 ### Event Trigger System 
 
+
 ## Result
 
 The EKF estimation along with the actual GNSS measurement shown below.
@@ -28,6 +29,20 @@ The EKF estimation along with the actual GNSS measurement shown below.
 ![Comparision With Vehicle Estimated Path with GNSS Measurement](img/EKF_estimated_vehicle_path_Ingolstadt.gif)
 ![](img/EKF_estimated_vehicle_path_Munich.gif)
 ![](img/EKF_estimated_vehicle_path_Gaimerscheim.gif)
+
+### Yaw (Heading) Angle Estimation
+The figure below shows the relationship between the IMU-measured yaw rate and the yaw (heading) angle estimated using an Extended Kalman Filter (EKF). The yaw rate corresponds to the angular velocity about the vehicle’s vertical (z) axis measured by the IMU gyroscope. Here, Peaks in the signal represent turning maneuvers, while values close to zero indicate straight-line driving. The yaw angle($\psi$) is estimated by the EKF using a kinematic process model driven primarily by the IMU yaw rate.
+The yaw angle is intentionally unwrapped, allowing continuous heading evolution beyond ($\pm\pi$).
+
+![](img/Yaw_Rate_and_Yaw_Angle_Ingolstadt.png)
+
+Periods where the yaw rate is close to zero correspond to nearly constant yaw angle.
+Sustained positive or negative yaw-rate excursions result in smooth increases or decreases in the estimated yaw angle.
+Sharp yaw-rate peaks are reflected as steeper slopes in the yaw-angle trajectory.
+The estimated yaw angle follows the integrated trend of the IMU yaw rate, while remaining smoother due to EKF filtering.
+
+This comparison demonstrates that the EKF yaw estimate is physically consistent with the IMU yaw-rate measurements, indicating correct sign conventions, proper integration behavior, and stable filter tuning. The smoothness of the yaw angle relative to the raw yaw rate further confirms effective noise attenuation by the EKF.
+
 
 
 
