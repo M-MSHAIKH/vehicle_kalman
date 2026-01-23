@@ -2,6 +2,25 @@
 
 This project implements various state estimation algorithms to estimate the trajectory  (x,y) of a vehicle based on noisy GNSS (Global Navigation Satellite System) measurements. At its core, the system utilizes a Kinematic Bicycle Model to predict the vehicle's motion and fuses these predictions with real-time positional data to produce a smooth, accurate path estimation. For validation the Audi A2D2 opensource dataset is used. Apart from the accurate path estimation the other goal of this project is to estimate the underlying vehicle dynamic quantity, such as slip angle which is hard to measure via sensors. 
 
+## Project Structure
+
+```
+vehicle_kalman/
+├── ekf/
+│   ├── __init__.py
+│   └── ekf.py                          # EKF implementation, Jacobians, noise matrices
+├── vehicle_model/
+│   ├── __init__.py
+│   └── kinematic_bicycle_model.py      # Vehicle dynamics model
+├── pre_processing/
+│   ├── __init__.py
+│   └── data_loading.py                 # CAN bus data extraction & preprocessing
+├── img/                                # Result visualizations
+├── ekf_main.py                         # Main execution script
+└── README.md
+```
+
+
 ## Data Processing
 As the actual CAN Bus raw data from the AUDI A2D2 dataset available are asynchronous. That means each sensor send a signal at it's own frequency. To use the dataset for other application such as for testing the MPC(Model Predictive Controller) or other controller requires a synchronous dataset. Same for the state estimation the control input would be same size. Moreover the timestamp given in a dataset is a **unix timestamps**. Longitudinal and Lateral coordinates are also in the global frame. 
 
@@ -53,5 +72,7 @@ This comparison demonstrates that the EKF yaw estimate is physically consistent 
 ## References
 
 1. https://en.wikipedia.org/wiki/World_Geodetic_System
+2. https://www.a2d2.audi/en/
+3. 
 
 

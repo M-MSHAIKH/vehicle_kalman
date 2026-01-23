@@ -128,6 +128,10 @@ plt.savefig('Yaw_Rate_and_Yaw_Angle_Ingolstadt.png', dpi=900)
 plt.show()
 
 ##########################################################################################################################
+# saving the yaw angle as a dataframe for further analysis
+import pandas as pd
+np.save('ekf_yaw_angle_ingolstadt.npy', X_upd[:,2,0])
+##########################################################################################################################
 # Interesting plots to visualize the EKF behaviour
 
 # plotting innovation residueal over time
