@@ -1,6 +1,28 @@
 # Vehicle State Estimation via Sensor Fusion: Implementation on the Audi A2D2 Dataset Using Various Estimation Algorithms
+This project implements various state estimation algorithms to accurately estimate a vehicle's trajectory (x,y) by fusing noisy GNSS (Global Navigation Satellite System) measurements with a Kinematic Bicycle Model **[Sensor Fusion]**.
 
-This project implements various state estimation algorithms to estimate the trajectory  (x,y) of a vehicle based on noisy GNSS (Global Navigation Satellite System) measurements. At its core, the system utilizes a Kinematic Bicycle Model to predict the vehicle's motion and fuses these predictions with real-time positional data to produce a smooth, accurate path estimation. For validation the Audi A2D2 opensource dataset is used. Apart from the accurate path estimation the other goal of this project is to estimate the underlying vehicle dynamic quantity, such as slip angle which is hard to measure via sensors. 
+**The Challenge: Asynchronous & Noisy Data**
+
+In real-world scenarios, such as those found in the Audi A2D2 dataset, raw CAN bus data is often noisy and asynchronous. This inconsistency makes it unsuitable for high-level control tasks or deep learning models without significant preprocessing.
+
+**The Solution: State Estimation**
+
+To bridge this gap, this project utilizes an Extended Kalman Filter (EKF) to:
+
+Generate Synchronous Data: Produce a uniform, time-aligned dataset where all sensor information is synchronized.
+
+Estimate Hidden States: Predict underlying vehicle dynamics that are difficult to measure directly with hardware sensors, such as the vehicle slip angle (β) **[State Estimation]**.
+
+**Applications for Autonomous Driving**
+
+The resulting high-fidelity, synchronous dataset provides a "clean" ground truth that can be used to train or test advanced autonomous driving modules, including:
+
+Motion Planning: Model Predictive Control (MPC).
+
+End-to-End Learning: Transformer-based trajectory prediction and behavior modeling.
+
+
+
 
 ## Project Structure
 
@@ -22,7 +44,7 @@ vehicle_kalman/
 
 
 ## Data Processing
-As the actual CAN Bus raw data from the AUDI A2D2 dataset available are asynchronous. That means each sensor send a signal at it's own frequency. To use the dataset for other application such as for testing the MPC(Model Predictive Controller) or other controller requires a synchronous dataset. Same for the state estimation the control input would be same size. Moreover the timestamp given in a dataset is a **unix timestamps**. Longitudinal and Lateral coordinates are also in the global frame. 
+As the actual CAN Bus raw data from the AUDI A2D2 dataset available are asynchronous. That means each sensor send a signal at it's own frequency. To use the dataset for other application such as for testing the MPC or other controller requires a synchronous dataset. Same for the state estimation the control input would be same size. Moreover the timestamp given in a dataset is a **unix timestamps**. Longitudinal and Lateral coordinates are also in the global frame. 
 
 ### Converting CAN bus unix timestamp to the standard date time format
 
@@ -73,6 +95,6 @@ This comparison demonstrates that the EKF yaw estimate is physically consistent 
 
 1. https://en.wikipedia.org/wiki/World_Geodetic_System
 2. https://www.a2d2.audi/en/
-3. 
+3. Teoh, T.S., Em, P.P., Ab Aziz, N.A.B., 2023. Vehicle Localization Based On IMU, OBD2, and GNSS Sensor Fusion Using Extended Kalman Filter. International Journal of Technology. Volume 14(6), pp. 1237-1246
 
 
