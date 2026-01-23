@@ -11,7 +11,7 @@ vehicle_kalman/
 │   └── ekf.py                          # EKF implementation, Jacobians, noise matrices
 ├── vehicle_model/
 │   ├── __init__.py
-│   └── kinematic_bicycle_model.py      # Vehicle dynamics model
+│   └── kinematic_bicycle_model.py      # Vehicle Kinematic model
 ├── pre_processing/
 │   ├── __init__.py
 │   └── data_loading.py                 # CAN bus data extraction & preprocessing
