@@ -58,13 +58,13 @@ In python, the datetime class contain a method called fromtimestamp. This method
 
 In the datasets, the longitudinal and latitude coordinate directly obtains from a GPS (Global Positioning System). This GPS usually gives a coordinate into the WGS 84 (World Geodetic System 1984) in radians. The WGS 84, defines an Earth-centered, Earth-fixed coordinate system and a geodetic datum [1].
 
-Converting a vehicle's longitude and latitude (from a GPS, in the WGS 84 datum) into local Cartesian x and y state coordinates can be done by defining the coordinates first into the local frame, such as ENU (East-North-Up). Where the x-axis points east, y-axis axis south and the up direction indicates the z-axis. This transformation accounts for the curvature of the Earth and the Earth's shape (ellipsoid model, like WGS 84). Moreover, this local ENU frame gives the world fixed vehicle position. As this ENU frame is anchored to a specific spot on the Earth's surface and does not move or rotate when the car moves. To eliminate the difference in orientation between the world-fixed frame (eg. ENU) and a vehicle, **rotation matrix** can be use.
+Converting a vehicle's longitude and latitude (from a GPS, in the WGS 84 datum) into local Cartesian x and y state coordinates can be done by defining the coordinates first into the local frame, such as ENU (East-North-Up). Where the x-axis points east, y-axis axis south and the up direction indicates the z-axis. This transformation accounts for the curvature of the Earth and the Earth's shape (ellipsoid model, like WGS 84). Moreover, this local ENU frame gives the world fixed vehicle position. As this ENU frame is anchored to a specific spot on the Earth's surface and does not move or rotate when the car moves. To eliminate the difference in orientation between the world-fixed frame (eg. ENU) and a vehicle, **rotation matrix** can be use. [1]
 
 ### Event Trigger System 
 
 ## How to Use
 
-You can copy paste the file path in the data_loading.py, which is accessible under the pre_processing folder. The file path should be the path of an actual unzipped CAN bus .json file. Now, run the ekf_main.py to obtain all the result including the estimated yaw angle.
+You can copy paste the file path in the data_loading.py, which is accessible under the pre_processing folder. The file path should be the path of an actual unzipped CAN bus .json file. The Can bus .json file can be downloaded from Audi A2D2 website [2].  Now, run the ekf_main.py to obtain all the result including the estimated yaw angle.
 ## Result
 
 The EKF estimation along with the actual GNSS measurement shown below.
