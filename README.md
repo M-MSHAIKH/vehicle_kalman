@@ -64,7 +64,7 @@ Converting a vehicle's longitude and latitude (from a GPS, in the WGS 84 datum) 
 
 ## How to Use
 
-You can copy paste the file path in the data_loading.py, which is accessible under the pre_processing folder. The file path should be the path of an actual unzipped CAN bus .json file. The Can bus .json file can be downloaded from Audi A2D2 website [2].  Now, run the ekf_main.py to obtain all the result including the estimated yaw angle.
+You can copy paste the file path in the data_loading.py, which is accessible under the pre_processing folder. The file path should be the path of an actual unzipped CAN bus .json file. The Can bus .json file can be downloaded from Audi A2D2 website. [2]  Now, run the ekf_main.py to obtain all the result including the estimated yaw angle.
 ## Result
 
 The EKF estimation along with the actual GNSS measurement shown below.
